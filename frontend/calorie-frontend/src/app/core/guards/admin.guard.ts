@@ -1,3 +1,4 @@
+// זהו Guard של Angular שמגן על נתיבים של מנהלים. הוא בודק שהמשתמש מחובר ושיש לו הרשאת Admin לפני כניסה לעמוד, ואם אין הרשאה הוא חוסם את הגישה ומעביר אותו לעמוד מתאים.
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';

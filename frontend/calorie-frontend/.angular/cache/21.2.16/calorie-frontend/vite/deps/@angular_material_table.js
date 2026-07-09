@@ -2,6 +2,7 @@ import {
   _DisposeViewRepeaterStrategy
 } from "./chunk-LSFZ4WSK.js";
 import "./chunk-42QFQP6S.js";
+import "./chunk-N4DOILP3.js";
 import {
   CDK_VIRTUAL_SCROLL_VIEWPORT,
   ScrollingModule,
@@ -18,7 +19,6 @@ import {
   BidiModule,
   Directionality
 } from "./chunk-TBXBV6EM.js";
-import "./chunk-N4DOILP3.js";
 import {
   _isNumberValue
 } from "./chunk-4E7YHTZL.js";

@@ -1,3 +1,4 @@
+// זהו קובץ Routes שמנהל את פעולות המשתמשים. הוא משתמש ב־Middleware לאימות והרשאות, מבצע בדיקות תקינות על נתונים, ומאפשר למשתמשים לנהל את הפרופיל שלהם ולמנהלים לנהל משתמשים אחרים.
 const express = require('express');
 const { body, param } = require('express-validator');
 

@@ -2,7 +2,7 @@ const { GoogleGenAI } = require('@google/genai');
 
 const { functionDeclarations, buildToolExecutors } = require('./agent.tools');
 
-const MODEL = 'gemini-1.5-flash';
+const MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 const MAX_TOOL_ITERATIONS = 5;
 
 const SYSTEM_INSTRUCTION = `אתה עוזר AI לאפליקציית ספירת קלוריות.
@@ -41,6 +41,7 @@ function buildInitialContents(message, history = []) {
   return [...mapHistoryToContents(history), { role: 'user', parts: [{ text: message.trim() }] }];
 }
 
+// Gemini יכול להחזיר Tool Calls בשתי צורות.
 function extractFunctionCalls(response) {
   const accessorCalls = response.functionCalls;
   if (accessorCalls?.length) {
@@ -81,6 +82,7 @@ function appendModelTurn(contents, response) {
   }
 }
 
+// מחזיר את התוצאה ל-Gemini.
 function buildFunctionResponsePart(call, result) {
   const functionResponse = {
     name: call.name,
@@ -94,6 +96,7 @@ function buildFunctionResponsePart(call, result) {
   return { functionResponse };
 }
 
+// פונקציה שמריצה Tool
 async function executeFunctionCall(call, executors, toolsUsed) {
   const executor = executors[call.name];
   let result;
@@ -117,7 +120,7 @@ async function executeFunctionCall(call, executors, toolsUsed) {
 
   return buildFunctionResponsePart(call, result);
 }
-
+// פונקציה  שמפעילה את כל האג'נט מתחילתו ועד סופו.
 async function runAgent({ message, history = [], user }) {
   if (!message?.trim()) {
     throw Object.assign(new Error('Message is required'), { statusCode: 400 });

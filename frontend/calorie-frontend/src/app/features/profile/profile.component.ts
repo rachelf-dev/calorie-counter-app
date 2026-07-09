@@ -1,3 +1,5 @@
+// הוא מנהל טופס Reactive לעדכון פרטים, טוען מידע מהשרת, מאפשר העלאת תמונת פרופיל, משתמש ב־
+// NgRx לשמירת מצב המשתמש ומטפל בהודעות ובמצבי טעינה.
 import { Location } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';

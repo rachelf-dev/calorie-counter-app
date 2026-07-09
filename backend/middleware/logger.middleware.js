@@ -1,3 +1,4 @@
+// זה Middleware שמנטר בקשות לשרת ושומר מידע על כל פעולה שבוצעה, כדי לעזור בדיבוג ובמעקב אחרי פעילות המערכת.
 const fs = require('fs');
 const path = require('path');
 

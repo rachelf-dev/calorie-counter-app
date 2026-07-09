@@ -32,11 +32,6 @@ function _getEventTarget(event) {
   return event.composedPath ? event.composedPath()[0] : event.target;
 }
 
-// node_modules/@angular/cdk/fesm2022/_test-environment-chunk.mjs
-function _isTestEnvironment() {
-  return typeof __karma__ !== "undefined" && !!__karma__ || typeof jasmine !== "undefined" && !!jasmine || typeof jest !== "undefined" && !!jest || typeof Mocha !== "undefined" && !!Mocha;
-}
-
 // node_modules/@angular/cdk/fesm2022/_passive-listeners-chunk.mjs
 var supportsPassiveEvents;
 function supportsPassiveEventListeners() {
@@ -55,11 +50,16 @@ function normalizePassiveListenerOptions(options) {
   return supportsPassiveEventListeners() ? options : !!options.capture;
 }
 
+// node_modules/@angular/cdk/fesm2022/_test-environment-chunk.mjs
+function _isTestEnvironment() {
+  return typeof __karma__ !== "undefined" && !!__karma__ || typeof jasmine !== "undefined" && !!jasmine || typeof jest !== "undefined" && !!jest || typeof Mocha !== "undefined" && !!Mocha;
+}
+
 export {
   _getShadowRoot,
   _getFocusedElementPierceShadowDom,
   _getEventTarget,
-  _isTestEnvironment,
-  normalizePassiveListenerOptions
+  normalizePassiveListenerOptions,
+  _isTestEnvironment
 };
-//# sourceMappingURL=chunk-ZI64A6ET.js.map
+//# sourceMappingURL=chunk-GWBU7KI5.js.map

@@ -1,3 +1,4 @@
+// זהו קובץ Unit Tests שבודק את תקינות ה־Guards של Angular. הוא מוודא שמשתמש מחובר מקבל גישה, משתמש לא מחובר מועבר ל־Login, ומשתמש מחובר לא יכול לחזור למסכי התחברות.
 import { TestBed } from '@angular/core/testing';
 import { Router, UrlTree } from '@angular/router';
 

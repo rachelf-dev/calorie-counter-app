@@ -1,3 +1,4 @@
+// זהו מודל משתמש שמגדיר את מבנה הנתונים ב־MongoDB, כולל ולידציות, הצפנת סיסמאות באמצעות bcrypt, בדיקת התחברות והסתרת מידע רגיש לפני שליחה ללקוח.
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 

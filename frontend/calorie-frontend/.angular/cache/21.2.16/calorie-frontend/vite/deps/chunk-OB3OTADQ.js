@@ -3,7 +3,7 @@ import {
   _getFocusedElementPierceShadowDom,
   _getShadowRoot,
   normalizePassiveListenerOptions
-} from "./chunk-ZI64A6ET.js";
+} from "./chunk-GWBU7KI5.js";
 import {
   _VisuallyHiddenLoader,
   _setInnerHtml
@@ -75,38 +75,6 @@ import {
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
 
-// node_modules/@angular/cdk/fesm2022/_id-generator-chunk.mjs
-var counters = {};
-var _IdGenerator = class __IdGenerator {
-  _appId = inject(APP_ID);
-  static _infix = `a${Math.floor(Math.random() * 1e5).toString()}`;
-  getId(prefix, randomize = false) {
-    if (this._appId !== "ng") {
-      prefix += this._appId;
-    }
-    if (!counters.hasOwnProperty(prefix)) {
-      counters[prefix] = 0;
-    }
-    return `${prefix}${randomize ? __IdGenerator._infix + "-" : ""}${counters[prefix]++}`;
-  }
-  static ɵfac = function _IdGenerator_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || __IdGenerator)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: __IdGenerator,
-    factory: __IdGenerator.ɵfac,
-    providedIn: "root"
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(_IdGenerator, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], null, null);
-})();
-
 // node_modules/@angular/cdk/fesm2022/_keycodes-chunk.mjs
 var TAB = 9;
 var ENTER = 13;
@@ -129,14 +97,6 @@ var A = 65;
 var Z = 90;
 var META = 91;
 var MAC_META = 224;
-
-// node_modules/@angular/cdk/fesm2022/keycodes.mjs
-function hasModifierKey(event, ...modifiers) {
-  if (modifiers.length) {
-    return modifiers.some((modifier) => event[modifier]);
-  }
-  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
-}
 
 // node_modules/@angular/cdk/fesm2022/_fake-event-detection-chunk.mjs
 function isFakeMousedownFromScreenReader(event) {
@@ -1471,6 +1431,14 @@ var A11yModule = class _A11yModule {
   }], () => [], null);
 })();
 
+// node_modules/@angular/cdk/fesm2022/keycodes.mjs
+function hasModifierKey(event, ...modifiers) {
+  if (modifiers.length) {
+    return modifiers.some((modifier) => event[modifier]);
+  }
+  return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+}
+
 // node_modules/@angular/cdk/fesm2022/_typeahead-chunk.mjs
 var DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS = 200;
 var Typeahead = class {
@@ -1823,6 +1791,38 @@ var FocusKeyManager = class extends ListKeyManager {
     }
   }
 };
+
+// node_modules/@angular/cdk/fesm2022/_id-generator-chunk.mjs
+var counters = {};
+var _IdGenerator = class __IdGenerator {
+  _appId = inject(APP_ID);
+  static _infix = `a${Math.floor(Math.random() * 1e5).toString()}`;
+  getId(prefix, randomize = false) {
+    if (this._appId !== "ng") {
+      prefix += this._appId;
+    }
+    if (!counters.hasOwnProperty(prefix)) {
+      counters[prefix] = 0;
+    }
+    return `${prefix}${randomize ? __IdGenerator._infix + "-" : ""}${counters[prefix]++}`;
+  }
+  static ɵfac = function _IdGenerator_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || __IdGenerator)();
+  };
+  static ɵprov = ɵɵdefineInjectable({
+    token: __IdGenerator,
+    factory: __IdGenerator.ɵfac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(_IdGenerator, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], null, null);
+})();
 
 // node_modules/@angular/cdk/fesm2022/coercion-private.mjs
 function coerceObservable(data) {
@@ -2420,8 +2420,8 @@ var ConfigurableFocusTrapFactory = class _ConfigurableFocusTrapFactory {
 })();
 
 export {
-  _IdGenerator,
-  TAB,
+  isFakeMousedownFromScreenReader,
+  isFakeTouchstartFromScreenReader,
   ENTER,
   ESCAPE,
   SPACE,
@@ -2430,9 +2430,6 @@ export {
   RIGHT_ARROW,
   DOWN_ARROW,
   A,
-  hasModifierKey,
-  isFakeMousedownFromScreenReader,
-  isFakeTouchstartFromScreenReader,
   FocusMonitor,
   CdkMonitorFocus,
   CdkObserveContent,
@@ -2441,9 +2438,11 @@ export {
   FocusTrapFactory,
   LiveAnnouncer,
   A11yModule,
+  hasModifierKey,
   ActiveDescendantKeyManager,
   FocusKeyManager,
+  _IdGenerator,
   addAriaReferencedId,
   removeAriaReferencedId
 };
-//# sourceMappingURL=chunk-W5WLMV5G.js.map
+//# sourceMappingURL=chunk-OB3OTADQ.js.map

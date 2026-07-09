@@ -1,3 +1,4 @@
+// זהו קובץ Routes שמנהל את פעולות ההרשמה וההתחברות. הוא מבצע ולידציה על הנתונים שמגיעים מהלקוח לפני שהם עוברים ל־Controller, וכך מונע הכנסת מידע לא תקין למערכת.
 const express = require('express');
 const { body } = require('express-validator');
 

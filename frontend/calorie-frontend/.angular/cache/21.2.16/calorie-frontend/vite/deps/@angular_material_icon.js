@@ -5,14 +5,14 @@ import {
   DomSanitizer
 } from "./chunk-AVZ6I6EW.js";
 import "./chunk-BKP7CLM2.js";
+import "./chunk-5U6TKTOF.js";
 import {
   BidiModule
 } from "./chunk-TBXBV6EM.js";
-import "./chunk-5U6TKTOF.js";
+import "./chunk-OT7ZBPSW.js";
 import {
   HttpClient
 } from "./chunk-YQ763V2D.js";
-import "./chunk-OT7ZBPSW.js";
 import "./chunk-36REI7N4.js";
 import {
   ChangeDetectionStrategy,

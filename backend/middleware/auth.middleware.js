@@ -1,3 +1,4 @@
+// ה־Middleware מוודא שרק משתמש מחובר עם Token תקין יכול לגשת לנתיבים מוגנים.
 const jwt = require('jsonwebtoken');
 
 function auth(req, res, next) {
