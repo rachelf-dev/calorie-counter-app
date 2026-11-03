@@ -1,0 +1,9 @@
+[build]
+  base = "frontend/calorie-frontend"
+  command = "npm install && npm run build"
+  publish = "dist/calorie-frontend/browser"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
