@@ -12,20 +12,102 @@ const SYSTEM_INSTRUCTION = `אתה עוזר AI לאפליקציית ספירת �
 ענה בעברית, בצורה קצרה, ידידותית וברורה.
 לאחר ביצוע פעולה, סכם למשתמש מה נעשה.`;
 
-let aiClient;
+const clientsByKey = new Map();
+let activeKeyIndex = 0;
 
-function getClient() {
-  const apiKey = process.env.GEMINI_API_KEY;
+function loadApiKeys() {
+  const keys = [];
+  const primary = process.env.GEMINI_API_KEY?.trim();
 
-  if (!apiKey) {
+  if (primary) {
+    keys.push(primary);
+  }
+
+  for (let i = 2; i <= 20; i += 1) {
+    const value = process.env[`GEMINI_API_KEY${i}`]?.trim();
+    if (value) {
+      keys.push(value);
+    }
+  }
+
+  return keys;
+}
+
+function isQuotaError(error) {
+  const status = error?.status ?? error?.statusCode ?? error?.code ?? error?.error?.code;
+  const apiStatus = String(error?.error?.status || '').toUpperCase();
+  const message = String(error?.message || error?.error?.message || '').toLowerCase();
+
+  if (status === 429 || status === '429') {
+    return true;
+  }
+
+  if (apiStatus === 'RESOURCE_EXHAUSTED') {
+    return true;
+  }
+
+  return (
+    message.includes('resource_exhausted') ||
+    message.includes('quota') ||
+    message.includes('rate limit') ||
+    message.includes('rate-limit') ||
+    message.includes('too many requests') ||
+    message.includes('exceeded your')
+  );
+}
+
+function getClientAt(index, keys) {
+  const apiKey = keys[index];
+  let client = clientsByKey.get(apiKey);
+
+  if (!client) {
+    client = new GoogleGenAI({ apiKey });
+    clientsByKey.set(apiKey, client);
+  }
+
+  return client;
+}
+
+async function generateContentWithFallback(params) {
+  const keys = loadApiKeys();
+
+  if (!keys.length) {
     throw Object.assign(new Error('Gemini API key is not configured'), { statusCode: 503 });
   }
 
-  if (!aiClient) {
-    aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  if (activeKeyIndex >= keys.length) {
+    activeKeyIndex = 0;
   }
 
-  return aiClient;
+  let lastError;
+
+  for (let offset = 0; offset < keys.length; offset += 1) {
+    const index = (activeKeyIndex + offset) % keys.length;
+
+    try {
+      const response = await getClientAt(index, keys).models.generateContent(params);
+      activeKeyIndex = index;
+      return response;
+    } catch (error) {
+      lastError = error;
+
+      if (!isQuotaError(error)) {
+        throw error;
+      }
+
+      activeKeyIndex = (index + 1) % keys.length;
+
+      if (offset === keys.length - 1) {
+        throw error;
+      }
+
+      console.warn(
+        `Gemini key ${index + 1}/${keys.length} hit a quota limit. Switching to the next key.`
+      );
+    }
+  }
+
+  throw lastError;
 }
 
 function mapHistoryToContents(history = []) {
@@ -126,7 +208,6 @@ async function runAgent({ message, history = [], user }) {
     throw Object.assign(new Error('Message is required'), { statusCode: 400 });
   }
 
-  const ai = getClient();
   const executors = buildToolExecutors(user);
   const contents = buildInitialContents(message, history);
   const toolsUsed = [];
@@ -141,7 +222,7 @@ async function runAgent({ message, history = [], user }) {
   let lastResponseRequestedTools = false;
 
   while (iteration < MAX_TOOL_ITERATIONS) {
-    response = await ai.models.generateContent({
+    response = await generateContentWithFallback({
       model: MODEL,
       contents,
       config: generateConfig,
@@ -174,7 +255,7 @@ async function runAgent({ message, history = [], user }) {
 
   // Tool loop exhausted while the model still requested tools — one final text-only call.
   if (lastResponseRequestedTools) {
-    response = await ai.models.generateContent({
+    response = await generateContentWithFallback({
       model: MODEL,
       contents,
       config: { systemInstruction: SYSTEM_INSTRUCTION },
