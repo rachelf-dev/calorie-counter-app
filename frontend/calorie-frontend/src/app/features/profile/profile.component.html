@@ -114,12 +114,73 @@
 
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>גובה (ס״מ)</mat-label>
-            <input matInput type="number" formControlName="height" min="0" />
+            <input matInput type="number" formControlName="height" min="0" placeholder="180" />
+            <mat-hint>בסנטימטרים — למשל 180 (לא 1.80)</mat-hint>
             @if (form.controls.height.hasError('min') && form.controls.height.touched) {
               <mat-error>גובה לא יכול להיות שלילי</mat-error>
             }
           </mat-form-field>
         </div>
+
+        <section class="calculator-section">
+          <h3 class="calculator-title">מחשבון יעד קלורי מומלץ</h3>
+          <p class="calculator-desc">
+            חישוב לפי נוסחת Mifflin-St Jeor (גיל, מין, משקל, גובה, רמת פעילות ומטרה).
+          </p>
+
+          <div class="row-fields">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>רמת פעילות</mat-label>
+              <mat-select [(value)]="activityLevel">
+                @for (option of activityOptions; track option.value) {
+                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>מטרת משקל</mat-label>
+              <mat-select [(value)]="goalDirection">
+                @for (option of goalOptions; track option.value) {
+                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <button
+            mat-stroked-button
+            type="button"
+            class="calc-btn full-width"
+            [disabled]="!canCalculateRecommended()"
+            (click)="calculateRecommended()"
+          >
+            <mat-icon>calculate</mat-icon>
+            חשב יעד מומלץ
+          </button>
+
+          @if (calculatorError()) {
+            <p class="calculator-error">{{ calculatorError() }}</p>
+          }
+
+          @if (recommendedCalories() != null) {
+            <div class="calculator-result">
+              <span class="result-label">יעד מומלץ:</span>
+              <span class="result-value">{{ recommendedCalories()! | calorieFormat }}</span>
+            </div>
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              class="apply-btn full-width"
+              (click)="applyRecommendedGoal()"
+            >
+              השתמש כיעד קלורי
+            </button>
+          } @else if (!canCalculateRecommended()) {
+            <p class="calculator-hint">מלאי גיל, מין, משקל וגובה כדי לחשב יעד מומלץ</p>
+          }
+        </section>
 
         <button
           mat-flat-button

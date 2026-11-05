@@ -2,7 +2,9 @@
 const fs = require('fs/promises');
 const path = require('path');
 
+const DailyLog = require('../models/DailyLog');
 const User = require('../models/User');
+const { getTodayDateString } = require('./log.controller');
 
 const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
 
@@ -72,6 +74,14 @@ async function updateProfile(req, res, next) {
     }
 
     await user.save();
+
+    if (calorieGoal !== undefined) {
+      const today = getTodayDateString();
+      await DailyLog.findOneAndUpdate(
+        { userId: user._id, date: today },
+        { targetCalories: user.calorieGoal }
+      );
+    }
 
     return res.status(200).json(user.toJSON());
   } catch (error) {

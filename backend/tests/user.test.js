@@ -2,6 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const request = require('supertest');
 
+const DailyLog = require('../models/DailyLog');
 const User = require('../models/User');
 const {
   app,
@@ -58,6 +59,31 @@ describe('Users API', () => {
       expect(response.body.name).toBe('Updated Name');
       expect(response.body.calorieGoal).toBe(1800);
       expect(response.body.age).toBe(30);
+    });
+
+    it('updates today log targetCalories when calorieGoal changes', async () => {
+      const user = await createUser({ email: 'goal-sync@example.com', calorieGoal: 2000 });
+      const token = signToken(user);
+      const today = new Date().toISOString().slice(0, 10);
+
+      await DailyLog.create({
+        userId: user._id,
+        date: today,
+        targetCalories: 2000,
+        totalCaloriesConsumed: 0,
+        items: [],
+      });
+
+      const response = await request(app)
+        .put('/api/users/profile')
+        .set(authHeader(token))
+        .send({ calorieGoal: 2150 });
+
+      expect(response.status).toBe(200);
+      expect(response.body.calorieGoal).toBe(2150);
+
+      const todayLog = await DailyLog.findOne({ userId: user._id, date: today });
+      expect(todayLog.targetCalories).toBe(2150);
     });
 
     it('returns 400 for invalid profile payload', async () => {
